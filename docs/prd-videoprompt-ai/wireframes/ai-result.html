@@ -1,226 +1,101 @@
+
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>AI 扩写结果 - VideoPrompt AI 原型</title>
+  <title>合成预览 - VideoPrompt AI Studio</title>
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body {
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-      color: #333;
       background: #fff;
-      max-width: 1200px;
+      color: #333;
+      max-width: 1280px;
       margin: 0 auto;
-      border: 1px solid #d0d0d0;
       min-height: 100vh;
+      border: 1px solid #d0d0d0;
     }
     .header {
       background: #f5f5f5;
-      padding: 12px 32px;
       border-bottom: 1px solid #d0d0d0;
+      padding: 16px 24px;
       display: flex;
-      align-items: center;
       justify-content: space-between;
+      align-items: center;
     }
-    .header h1 { font-size: 18px; font-weight: 600; }
-    .nav { display: flex; gap: 20px; align-items: center; }
-    .nav a { color: #888; text-decoration: none; font-size: 14px; }
-    .nav a.active { color: #333; font-weight: 600; }
-    .nav a:hover { color: #333; }
-    .content { padding: 24px 32px; }
-    .back-link { color: #4a90d9; text-decoration: none; font-size: 13px; }
-    .back-link:hover { text-decoration: underline; }
+    .header h1 { font-size: 20px; font-weight: 700; }
+    .content { padding: 24px; }
+    .card { background: #f5f5f5; border: 1px solid #d0d0d0; border-radius: 8px; padding: 16px; margin-bottom: 16px; }
+    .section-title { font-size: 18px; font-weight: 600; margin-bottom: 12px; }
     .text-secondary { color: #888; font-size: 12px; }
-    .section-title { font-size: 16px; font-weight: 600; margin-bottom: 12px; }
-    .card {
-      background: #f5f5f5;
-      border: 1px solid #d0d0d0;
-      border-radius: 8px;
-      padding: 20px;
-      margin-bottom: 16px;
-    }
-    .compare-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 20px;
-    }
-    .model-card {
-      border: 1px solid #d0d0d0;
-      border-radius: 8px;
-      overflow: hidden;
-    }
-    .model-card-header {
-      background: #f5f5f5;
-      padding: 12px 16px;
-      border-bottom: 1px solid #d0d0d0;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-    .model-card-header h3 { font-size: 15px; font-weight: 600; }
-    .model-card-body {
-      padding: 16px;
-      font-size: 14px;
-      line-height: 1.7;
-      white-space: pre-wrap;
-      min-height: 200px;
-    }
-    .model-card-footer {
-      padding: 12px 16px;
-      border-top: 1px solid #d0d0d0;
-      display: flex;
-      gap: 8px;
-      justify-content: flex-end;
-    }
-    .btn-icon {
-      background: none;
-      border: 1px solid #d0d0d0;
-      padding: 6px 12px;
-      border-radius: 6px;
-      font-size: 13px;
-      cursor: pointer;
-      color: #555;
-    }
-    .btn-primary {
-      background: #555;
-      color: #fff;
-      border: none;
-      padding: 10px 20px;
-      border-radius: 6px;
-      font-size: 14px;
-      cursor: pointer;
-    }
-    .btn-secondary {
-      background: #fff;
-      color: #555;
-      border: 1px solid #aaa;
-      padding: 10px 20px;
-      border-radius: 6px;
-      font-size: 14px;
-      cursor: pointer;
-      text-decoration: none;
-      display: inline-block;
-    }
-    .original-box {
-      background: #fff;
-      border: 1px solid #d0d0d0;
-      border-radius: 6px;
-      padding: 12px 16px;
-      font-size: 13px;
-      color: #888;
-      line-height: 1.6;
-    }
-    .badge {
-      display: inline-block;
-      padding: 2px 8px;
-      border-radius: 4px;
-      font-size: 11px;
-      font-weight: 600;
-      background: #e0e0e0;
-      color: #555;
-    }
-    .diff-highlight {
-      background: #e8f4e8;
-      padding: 0 2px;
-      border-radius: 2px;
-    }
-    .tips-box {
-      background: #f5f5f5;
-      border: 1px solid #d0d0d0;
-      border-radius: 8px;
-      padding: 14px 20px;
-      font-size: 13px;
-      color: #888;
-      margin-top: 16px;
-    }
+    .btn-primary { background: #555; color: #fff; border: none; padding: 10px 18px; border-radius: 6px; text-decoration: none; display: inline-block; }
+    .btn-secondary { background: #fff; color: #555; border: 1px solid #aaa; padding: 10px 18px; border-radius: 6px; text-decoration: none; display: inline-block; }
+    .nav-link { color: #4a90d9; text-decoration: none; }
+    .nav-link:hover { text-decoration: underline; }
+    .badge { display: inline-block; padding: 3px 8px; border-radius: 999px; font-size: 11px; font-weight: 600; }
+    .badge-dark { background: #555; color: #fff; }
+    .badge-light { background: #e8e8e8; color: #333; }
+    .grid-2 { display: grid; grid-template-columns: 1.2fr 1fr; gap: 16px; }
+    .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+    .list { display: grid; gap: 12px; }
+    .input-field { width: 100%; border: 1px solid #d0d0d0; border-radius: 6px; padding: 10px 12px; background: #fff; font-size: 14px; margin-top: 6px; }
+    textarea.input-field { min-height: 100px; resize: vertical; }
+    .placeholder { background: #e0e0e0; border-radius: 6px; color: #888; display: flex; align-items: center; justify-content: center; }
+    .toolbar { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 12px; }
+    .row { display: flex; justify-content: space-between; align-items: center; gap: 12px; }
+    .chip { display: inline-block; padding: 4px 8px; border-radius: 999px; border: 1px solid #d0d0d0; background: #fff; font-size: 12px; margin-right: 6px; margin-bottom: 6px; }
+    .step { border-left: 3px solid #555; padding-left: 10px; margin-bottom: 12px; }
+    .footer-links { margin-top: 16px; display: flex; gap: 12px; flex-wrap: wrap; }
+    @media (max-width: 900px) { .grid-2, .grid-3 { grid-template-columns: 1fr; } body { max-width: 100%; } }
   </style>
 </head>
 <body>
+
   <div class="header">
-    <h1>🎬 VideoPrompt AI</h1>
-    <div class="nav">
-      <a href="editor.html" class="active">编辑器</a>
-      <a href="templates.html">模板库</a>
-      <a href="my-prompts.html">我的提示词</a>
-      <a href="login.html">登录</a>
-    </div>
+    <h1>合成预览</h1>
+    <span class="text-secondary"><a class="nav-link" href="editor.html">返回工作台</a></span>
   </div>
-
   <div class="content">
-    <div style="margin-bottom: 20px;">
-      <a href="editor.html" class="back-link">← 返回编辑器</a>
-    </div>
-
-    <!-- 原始输入 -->
-    <div style="margin-bottom: 24px;">
-      <div class="section-title">📝 你的原始描述</div>
-      <div class="original-box">
-        一个穿白色衬衫的年轻女孩，在樱花树下转圈。场景：日本京都古老街道。运镜：环绕跟踪。光影：黄金时段。情绪：宁静、浪漫。风格：电影感。时长 8s，16:9。
-      </div>
-    </div>
-
-    <!-- AI 优化后双模型对比 -->
-    <div class="section-title">✨ AI 优化结果 — 双模型对比</div>
-    <p class="text-secondary" style="margin-bottom: 16px;">AI 已根据 Sora 2 和 Seedance 2.0 的最佳实践分别生成优化提示词</p>
-
-    <div class="compare-grid">
-      <!-- Sora 2 -->
-      <div class="model-card">
-        <div class="model-card-header">
-          <h3>Sora 2</h3>
-          <span class="badge">English</span>
+    <div class="grid-2">
+      <div>
+        <div class="card">
+          <div class="row"><div class="section-title" style="margin-bottom:0;">分镜草稿</div><span class="badge badge-dark">3 镜头</span></div>
+          <div class="list" style="margin-top:12px;">
+            <div class="card" style="margin-bottom:0;background:#fff;">
+              <strong>镜头 1：新品亮相</strong>
+              <p class="text-secondary" style="margin-top:6px;">字幕：轻薄持妆新品上线，30 秒搞定日常底妆。</p>
+            </div>
+            <div class="card" style="margin-bottom:0;background:#fff;">
+              <strong>镜头 2：上脸对比</strong>
+              <p class="text-secondary" style="margin-top:6px;">字幕：遮瑕更自然，妆感更服帖，全天不斑驳。</p>
+            </div>
+            <div class="card" style="margin-bottom:0;background:#fff;">
+              <strong>镜头 3：活动收口</strong>
+              <p class="text-secondary" style="margin-top:6px;">字幕：限时 79 折，点击预约直播间抢先购。</p>
+            </div>
+          </div>
         </div>
-        <div class="model-card-body">A young woman in a crisp white linen shirt spins gracefully beneath a canopy of blooming cherry blossom trees on a centuries-old cobblestone street in Kyoto, Japan. Delicate pink petals drift through the warm air, catching the golden hour sunlight that filters through the branches.
-
-<span class="diff-highlight">Orbiting tracking shot, slowly circling the subject at waist height, anamorphic 2.0x lens with shallow depth of field.</span> The background softly blurs into warm bokeh of traditional wooden machiya houses and paper lanterns.
-
-<span class="diff-highlight">Golden hour lighting — warm amber tones with soft directional light from camera left, gentle rim light on the subject's hair and shoulders.</span>
-
-Cinematic widescreen composition. Serene, romantic atmosphere with a dreamlike quality. Gentle wind movement in fabric and petals.
-
-Duration: 8 seconds. Aspect ratio: 16:9.</div>
-        <div class="model-card-footer">
-          <button class="btn-icon">📋 复制</button>
-          <button class="btn-icon">💾 保存</button>
-          <button class="btn-icon">✏️ 编辑</button>
+        <div class="card">
+          <div class="section-title">字幕与配音建议</div>
+          <div class="chip">字幕风格：大字重点高亮</div>
+          <div class="chip">配音：温柔女声</div>
+          <div class="chip">BGM：轻快美妆风</div>
+          <div class="toolbar">
+            <a class="btn-secondary" href="editor.html">返回修改</a>
+            <a class="btn-primary" href="model-selector.html">进入导出中心</a>
+          </div>
         </div>
       </div>
-
-      <!-- Seedance 2.0 -->
-      <div class="model-card">
-        <div class="model-card-header">
-          <h3>Seedance 2.0</h3>
-          <span class="badge">中文</span>
-        </div>
-        <div class="model-card-body">一个穿白色亚麻衬衫的年轻女孩在京都古街的樱花树下优雅地旋转，粉色花瓣在黄金时段的阳光中飘落。
-
-<span class="diff-highlight">运镜：环绕跟踪镜头，摄像机以腰部高度缓慢围绕主体旋转360度，保持浅景深，背景虚化为温暖的传统木屋和纸灯笼光斑。</span>
-
-<span class="diff-highlight">光影：黄金时段暖色调，从画面左侧打出柔和的方向性光线，主体发丝和肩部带有轻微轮廓光。</span>
-
-画面风格：电影感宽画幅构图，宁静浪漫的梦幻氛围。衣物和花瓣有自然的微风动态。画面色调偏暖。
-
-时长：8秒。画面比例：16:9。</div>
-        <div class="model-card-footer">
-          <button class="btn-icon">📋 复制</button>
-          <button class="btn-icon">💾 保存</button>
-          <button class="btn-icon">✏️ 编辑</button>
+      <div>
+        <div class="card">
+          <div class="section-title">预览区</div>
+          <div class="placeholder" style="height:420px; border:1px solid #d0d0d0;">9:16 视频预览占位</div>
+          <p class="text-secondary" style="margin-top:8px;">右侧预览用于展示封面、镜头切换、字幕位置和 CTA 收口区域。</p>
         </div>
       </div>
-    </div>
-
-    <!-- 差异说明 -->
-    <div class="tips-box">
-      💡 <strong>模型差异说明</strong>：Sora 2 版本使用英文输出（Sora 对英文提示词效果更好），包含专业摄影术语（anamorphic lens, shallow DOF）。Seedance 2.0 版本使用中文（即梦对中文支持良好），运镜描述更具体化，适合其理解模式。<br><br>
-      <strong>绿色高亮</strong>部分为 AI 扩写增加的专业细节。
-    </div>
-
-    <!-- 操作按钮 -->
-    <div style="display: flex; gap: 12px; margin-top: 20px;">
-      <a href="editor.html" class="btn-secondary">← 返回编辑器继续调整</a>
-      <button class="btn-primary">🔄 重新生成</button>
     </div>
   </div>
+
 </body>
 </html>

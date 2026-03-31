@@ -1,149 +1,75 @@
+
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>VideoPrompt AI — 原型导航</title>
+  <title>VideoPrompt AI Studio — 原型导航</title>
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body {
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-      color: #333;
       background: #fff;
-      max-width: 1200px;
+      color: #333;
+      max-width: 1280px;
       margin: 0 auto;
-      border: 1px solid #d0d0d0;
       min-height: 100vh;
+      border: 1px solid #d0d0d0;
     }
     .header {
       background: #f5f5f5;
-      padding: 16px 32px;
       border-bottom: 1px solid #d0d0d0;
+      padding: 16px 24px;
       display: flex;
-      align-items: center;
       justify-content: space-between;
+      align-items: center;
     }
     .header h1 { font-size: 20px; font-weight: 700; }
-    .content { padding: 32px; }
-    .card {
-      background: #f5f5f5;
-      border: 1px solid #d0d0d0;
-      border-radius: 8px;
-      padding: 16px 20px;
-      margin-bottom: 12px;
-    }
-    .nav-link {
-      color: #4a90d9;
-      text-decoration: none;
-      font-size: 15px;
-      font-weight: 600;
-    }
-    .nav-link:hover { text-decoration: underline; }
+    .content { padding: 24px; }
+    .card { background: #f5f5f5; border: 1px solid #d0d0d0; border-radius: 8px; padding: 16px; margin-bottom: 16px; }
+    .section-title { font-size: 18px; font-weight: 600; margin-bottom: 12px; }
     .text-secondary { color: #888; font-size: 12px; }
-    .badge {
-      display: inline-block;
-      padding: 2px 8px;
-      border-radius: 4px;
-      font-size: 11px;
-      font-weight: 600;
-    }
-    .badge-p0 { background: #555; color: #fff; }
-    .badge-p1 { background: #d0d0d0; color: #333; }
-    .flex-between { display: flex; justify-content: space-between; align-items: center; }
-    .flow-chart {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      flex-wrap: wrap;
-      margin: 12px 0;
-    }
-    .flow-step {
-      background: #fff;
-      border: 1px solid #d0d0d0;
-      border-radius: 6px;
-      padding: 8px 14px;
-      font-size: 13px;
-    }
-    .flow-arrow { color: #888; font-size: 16px; }
+    .btn-primary { background: #555; color: #fff; border: none; padding: 10px 18px; border-radius: 6px; text-decoration: none; display: inline-block; }
+    .btn-secondary { background: #fff; color: #555; border: 1px solid #aaa; padding: 10px 18px; border-radius: 6px; text-decoration: none; display: inline-block; }
+    .nav-link { color: #4a90d9; text-decoration: none; }
+    .nav-link:hover { text-decoration: underline; }
+    .badge { display: inline-block; padding: 3px 8px; border-radius: 999px; font-size: 11px; font-weight: 600; }
+    .badge-dark { background: #555; color: #fff; }
+    .badge-light { background: #e8e8e8; color: #333; }
+    .grid-2 { display: grid; grid-template-columns: 1.2fr 1fr; gap: 16px; }
+    .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+    .list { display: grid; gap: 12px; }
+    .input-field { width: 100%; border: 1px solid #d0d0d0; border-radius: 6px; padding: 10px 12px; background: #fff; font-size: 14px; margin-top: 6px; }
+    textarea.input-field { min-height: 100px; resize: vertical; }
+    .placeholder { background: #e0e0e0; border-radius: 6px; color: #888; display: flex; align-items: center; justify-content: center; }
+    .toolbar { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 12px; }
+    .row { display: flex; justify-content: space-between; align-items: center; gap: 12px; }
+    .chip { display: inline-block; padding: 4px 8px; border-radius: 999px; border: 1px solid #d0d0d0; background: #fff; font-size: 12px; margin-right: 6px; margin-bottom: 6px; }
+    .step { border-left: 3px solid #555; padding-left: 10px; margin-bottom: 12px; }
+    .footer-links { margin-top: 16px; display: flex; gap: 12px; flex-wrap: wrap; }
+    @media (max-width: 900px) { .grid-2, .grid-3 { grid-template-columns: 1fr; } body { max-width: 100%; } }
   </style>
 </head>
 <body>
+
   <div class="header">
-    <h1>🎬 VideoPrompt AI — 原型导航</h1>
-    <span class="text-secondary">v2.0 · 低保真原型</span>
+    <h1>🎬 VideoPrompt AI Studio — 原型导航</h1>
+    <span class="text-secondary">v3.0.0 · 短视频合成 MVP</span>
   </div>
   <div class="content">
-    <p class="text-secondary" style="margin-bottom: 20px;">
-      低保真原型图（wireframe），展示页面布局与核心交互流程。点击页面名称进入对应页面。
-    </p>
-
     <div class="card">
-      <h3 style="font-size: 16px; margin-bottom: 8px;">核心用户流程</h3>
-      <div class="flow-chart">
-        <div class="flow-step">打开首页（编辑器）</div>
-        <span class="flow-arrow">→</span>
-        <div class="flow-step">输入描述 / 选择参数</div>
-        <span class="flow-arrow">→</span>
-        <div class="flow-step">选择目标模型（多选）</div>
-        <span class="flow-arrow">→</span>
-        <div class="flow-step">AI 一键优化</div>
-        <span class="flow-arrow">→</span>
-        <div class="flow-step">多模型对比预览</div>
-        <span class="flow-arrow">→</span>
-        <div class="flow-step">一键复制使用</div>
-      </div>
+      <div class="section-title">核心流程</div>
+      <p class="text-secondary">脚本/图文输入 → 选择模板 → 生成分镜草稿 → 调整字幕/素材/配音 → 导出视频 → 保存项目复用</p>
     </div>
-
-    <h3 style="font-size: 16px; margin: 24px 0 12px;">页面列表</h3>
-
-    <div class="card flex-between">
-      <div>
-        <a href="editor.html" class="nav-link">提示词编辑器（首页）</a>
-        <p class="text-secondary" style="margin-top: 4px;">核心页面：结构化参数面板 + 自由文本输入 + AI 扩写 + 模型切换 + 一键复制</p>
-      </div>
-      <span class="badge badge-p0">P0</span>
-    </div>
-
-    <div class="card flex-between">
-      <div>
-        <a href="ai-result.html" class="nav-link">AI 扩写结果</a>
-        <p class="text-secondary" style="margin-top: 4px;">AI 优化后的提示词展示 + Sora / Seedance 双模型对比视图</p>
-      </div>
-      <span class="badge badge-p0">P0</span>
-    </div>
-
-    <div class="card flex-between">
-      <div>
-        <a href="templates.html" class="nav-link">模板库</a>
-        <p class="text-secondary" style="margin-top: 4px;">按场景分类浏览预设提示词模板，一键加载到编辑器</p>
-      </div>
-      <span class="badge badge-p1">P1</span>
-    </div>
-
-    <div class="card flex-between">
-      <div>
-        <a href="my-prompts.html" class="nav-link">我的提示词</a>
-        <p class="text-secondary" style="margin-top: 4px;">已保存提示词列表、标签管理、历史记录</p>
-      </div>
-      <span class="badge badge-p1">P1</span>
-    </div>
-
-    <div class="card flex-between">
-      <div>
-        <a href="login.html" class="nav-link">登录注册</a>
-        <p class="text-secondary" style="margin-top: 4px;">邮箱注册 + Google/GitHub 第三方登录</p>
-      </div>
-      <span class="badge badge-p1">P1</span>
-    </div>
-
-    <div class="card flex-between" style="border-left: 3px solid #2e7d32;">
-      <div>
-        <a href="model-selector.html" class="nav-link">多模型选择器</a>
-        <span style="display:inline-block;background:#e8f5e9;color:#2e7d32;font-size:10px;padding:1px 6px;border-radius:3px;margin-left:6px;font-weight:600;">v2.0 新增</span>
-        <p class="text-secondary" style="margin-top: 4px;">视频/图像模型卡片多选 + 已选模型摘要 + AI 智能推荐 + 多模型对比输出视图</p>
-      </div>
-      <span class="badge badge-p0">P0</span>
+    <div class="grid-3">
+      <div class="card"><a class="nav-link" href="editor.html"><strong>创作工作台</strong></a><p class="text-secondary" style="margin-top:8px;">输入卖点脚本、上传图片并创建项目草稿。</p></div>
+      <div class="card"><a class="nav-link" href="templates.html"><strong>模板中心</strong></a><p class="text-secondary" style="margin-top:8px;">选择新品、促销、口播、图文转视频等模板。</p></div>
+      <div class="card"><a class="nav-link" href="ai-result.html"><strong>合成预览</strong></a><p class="text-secondary" style="margin-top:8px;">查看分镜草稿、字幕编辑区与配音/BGM 推荐。</p></div>
+      <div class="card"><a class="nav-link" href="model-selector.html"><strong>导出中心</strong></a><p class="text-secondary" style="margin-top:8px;">设置 9:16 导出、平台预设并查看校验结果。</p></div>
+      <div class="card"><a class="nav-link" href="my-prompts.html"><strong>项目库</strong></a><p class="text-secondary" style="margin-top:8px;">浏览历史项目、复制项目、再次编辑与导出。</p></div>
+      <div class="card"><a class="nav-link" href="login.html"><strong>登录 / 升级</strong></a><p class="text-secondary" style="margin-top:8px;">登录同步项目，升级获取高清导出与 AI 增值能力。</p></div>
     </div>
   </div>
+
 </body>
 </html>

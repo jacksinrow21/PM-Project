@@ -1,278 +1,89 @@
+
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>模板库 - VideoPrompt AI 原型</title>
+  <title>模板中心 - VideoPrompt AI Studio</title>
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body {
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-      color: #333;
       background: #fff;
-      max-width: 1200px;
+      color: #333;
+      max-width: 1280px;
       margin: 0 auto;
-      border: 1px solid #d0d0d0;
       min-height: 100vh;
+      border: 1px solid #d0d0d0;
     }
     .header {
       background: #f5f5f5;
-      padding: 12px 32px;
       border-bottom: 1px solid #d0d0d0;
+      padding: 16px 24px;
       display: flex;
-      align-items: center;
       justify-content: space-between;
+      align-items: center;
     }
-    .header h1 { font-size: 18px; font-weight: 600; }
-    .nav { display: flex; gap: 20px; align-items: center; }
-    .nav a { color: #888; text-decoration: none; font-size: 14px; }
-    .nav a.active { color: #333; font-weight: 600; }
-    .nav a:hover { color: #333; }
-    .content { padding: 24px 32px; }
+    .header h1 { font-size: 20px; font-weight: 700; }
+    .content { padding: 24px; }
+    .card { background: #f5f5f5; border: 1px solid #d0d0d0; border-radius: 8px; padding: 16px; margin-bottom: 16px; }
+    .section-title { font-size: 18px; font-weight: 600; margin-bottom: 12px; }
     .text-secondary { color: #888; font-size: 12px; }
-    .section-title { font-size: 16px; font-weight: 600; margin-bottom: 12px; }
-    .search-bar {
-      display: flex;
-      gap: 8px;
-      margin-bottom: 20px;
-    }
-    .input-field {
-      padding: 10px 12px;
-      border: 1px solid #d0d0d0;
-      border-radius: 6px;
-      font-size: 14px;
-      background: #fff;
-      flex: 1;
-    }
-    .btn-secondary {
-      background: #fff;
-      color: #555;
-      border: 1px solid #aaa;
-      padding: 10px 16px;
-      border-radius: 6px;
-      font-size: 14px;
-      cursor: pointer;
-      white-space: nowrap;
-    }
-    .category-tabs {
-      display: flex;
-      gap: 8px;
-      margin-bottom: 20px;
-      flex-wrap: wrap;
-    }
-    .category-tab {
-      padding: 6px 14px;
-      border: 1px solid #d0d0d0;
-      border-radius: 16px;
-      font-size: 13px;
-      cursor: pointer;
-      background: #fff;
-      color: #555;
-    }
-    .category-tab.active {
-      background: #555;
-      color: #fff;
-      border-color: #555;
-    }
-    .template-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 16px;
-    }
-    .template-card {
-      border: 1px solid #d0d0d0;
-      border-radius: 8px;
-      overflow: hidden;
-      cursor: pointer;
-      transition: box-shadow 0.2s;
-    }
-    .template-card:hover { box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
-    .template-preview {
-      background: #e0e0e0;
-      height: 140px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: #888;
-      font-size: 12px;
-    }
-    .template-info {
-      padding: 12px 14px;
-    }
-    .template-title {
-      font-size: 14px;
-      font-weight: 600;
-      margin-bottom: 4px;
-    }
-    .template-desc {
-      font-size: 12px;
-      color: #888;
-      line-height: 1.5;
-      margin-bottom: 8px;
-    }
-    .template-meta {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-    .tag {
-      display: inline-block;
-      padding: 2px 8px;
-      background: #f5f5f5;
-      border-radius: 4px;
-      font-size: 11px;
-      color: #888;
-    }
-    .use-btn {
-      background: #555;
-      color: #fff;
-      border: none;
-      padding: 4px 12px;
-      border-radius: 4px;
-      font-size: 12px;
-      cursor: pointer;
-      text-decoration: none;
-    }
+    .btn-primary { background: #555; color: #fff; border: none; padding: 10px 18px; border-radius: 6px; text-decoration: none; display: inline-block; }
+    .btn-secondary { background: #fff; color: #555; border: 1px solid #aaa; padding: 10px 18px; border-radius: 6px; text-decoration: none; display: inline-block; }
+    .nav-link { color: #4a90d9; text-decoration: none; }
+    .nav-link:hover { text-decoration: underline; }
+    .badge { display: inline-block; padding: 3px 8px; border-radius: 999px; font-size: 11px; font-weight: 600; }
+    .badge-dark { background: #555; color: #fff; }
+    .badge-light { background: #e8e8e8; color: #333; }
+    .grid-2 { display: grid; grid-template-columns: 1.2fr 1fr; gap: 16px; }
+    .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+    .list { display: grid; gap: 12px; }
+    .input-field { width: 100%; border: 1px solid #d0d0d0; border-radius: 6px; padding: 10px 12px; background: #fff; font-size: 14px; margin-top: 6px; }
+    textarea.input-field { min-height: 100px; resize: vertical; }
+    .placeholder { background: #e0e0e0; border-radius: 6px; color: #888; display: flex; align-items: center; justify-content: center; }
+    .toolbar { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 12px; }
+    .row { display: flex; justify-content: space-between; align-items: center; gap: 12px; }
+    .chip { display: inline-block; padding: 4px 8px; border-radius: 999px; border: 1px solid #d0d0d0; background: #fff; font-size: 12px; margin-right: 6px; margin-bottom: 6px; }
+    .step { border-left: 3px solid #555; padding-left: 10px; margin-bottom: 12px; }
+    .footer-links { margin-top: 16px; display: flex; gap: 12px; flex-wrap: wrap; }
+    @media (max-width: 900px) { .grid-2, .grid-3 { grid-template-columns: 1fr; } body { max-width: 100%; } }
   </style>
 </head>
 <body>
+
   <div class="header">
-    <h1>🎬 VideoPrompt AI</h1>
-    <div class="nav">
-      <a href="editor.html">编辑器</a>
-      <a href="templates.html" class="active">模板库</a>
-      <a href="my-prompts.html">我的提示词</a>
-      <a href="login.html">登录</a>
-    </div>
+    <h1>模板中心</h1>
+    <span class="text-secondary"><a class="nav-link" href="editor.html">返回工作台</a></span>
   </div>
-
   <div class="content">
-    <div class="section-title">📚 提示词模板库</div>
-    <p class="text-secondary" style="margin-bottom: 16px;">精选提示词模板，一键加载到编辑器进行二次创作</p>
-
-    <!-- 搜索栏 -->
-    <div class="search-bar">
-      <input class="input-field" type="text" placeholder="🔍 搜索模板...">
-      <button class="btn-secondary">搜索</button>
-    </div>
-
-    <!-- 分类标签 -->
-    <div class="category-tabs">
-      <span class="category-tab active">全部</span>
-      <span class="category-tab">电影感</span>
-      <span class="category-tab">自然风光</span>
-      <span class="category-tab">产品展示</span>
-      <span class="category-tab">广告创意</span>
-      <span class="category-tab">人物特写</span>
-      <span class="category-tab">动作场景</span>
-      <span class="category-tab">城市街景</span>
-      <span class="category-tab">抽象艺术</span>
-      <span class="category-tab">动画风格</span>
-    </div>
-
-    <!-- 模板网格 -->
-    <div class="template-grid">
-      <!-- 模板 1 -->
-      <div class="template-card">
-        <div class="template-preview">🎬 电影场景预览</div>
-        <div class="template-info">
-          <div class="template-title">雨中城市漫步</div>
-          <div class="template-desc">一个人撑着透明雨伞走在霓虹灯照亮的东京街道，手持镜头跟随，赛博朋克风格</div>
-          <div class="template-meta">
-            <div>
-              <span class="tag">电影感</span>
-              <span class="tag">城市</span>
-            </div>
-            <a href="editor.html" class="use-btn">使用</a>
-          </div>
-        </div>
-      </div>
-
-      <!-- 模板 2 -->
-      <div class="template-card">
-        <div class="template-preview">🌊 自然风光预览</div>
-        <div class="template-info">
-          <div class="template-title">日出海浪航拍</div>
-          <div class="template-desc">金色日出时分，无人机航拍壮观的海浪拍打悬崖，史诗感配乐风格</div>
-          <div class="template-meta">
-            <div>
-              <span class="tag">自然风光</span>
-              <span class="tag">航拍</span>
-            </div>
-            <a href="editor.html" class="use-btn">使用</a>
-          </div>
-        </div>
-      </div>
-
-      <!-- 模板 3 -->
-      <div class="template-card">
-        <div class="template-preview">📱 产品展示预览</div>
-        <div class="template-info">
-          <div class="template-title">科技产品开箱</div>
-          <div class="template-desc">极简白色背景上，一款手机缓慢旋转展示，微距镜头捕捉材质细节，广告大片风格</div>
-          <div class="template-meta">
-            <div>
-              <span class="tag">产品展示</span>
-              <span class="tag">广告</span>
-            </div>
-            <a href="editor.html" class="use-btn">使用</a>
-          </div>
-        </div>
-      </div>
-
-      <!-- 模板 4 -->
-      <div class="template-card">
-        <div class="template-preview">🎭 人物特写预览</div>
-        <div class="template-info">
-          <div class="template-title">咖啡馆人物肖像</div>
-          <div class="template-desc">年轻女性在复古咖啡馆阅读，慢推近特写，伦勃朗光，温暖的胶片质感</div>
-          <div class="template-meta">
-            <div>
-              <span class="tag">人物特写</span>
-              <span class="tag">复古</span>
-            </div>
-            <a href="editor.html" class="use-btn">使用</a>
-          </div>
-        </div>
-      </div>
-
-      <!-- 模板 5 -->
-      <div class="template-card">
-        <div class="template-preview">🏃 动作场景预览</div>
-        <div class="template-info">
-          <div class="template-title">跑酷城市追逐</div>
-          <div class="template-desc">运动员在屋顶间跳跃翻越，快速剪辑风格，手持跟随镜头，紧张刺激</div>
-          <div class="template-meta">
-            <div>
-              <span class="tag">动作</span>
-              <span class="tag">运动</span>
-            </div>
-            <a href="editor.html" class="use-btn">使用</a>
-          </div>
-        </div>
-      </div>
-
-      <!-- 模板 6 -->
-      <div class="template-card">
-        <div class="template-preview">🎨 抽象艺术预览</div>
-        <div class="template-info">
-          <div class="template-title">流体色彩抽象</div>
-          <div class="template-desc">鲜艳的流体色彩在黑色背景上缓慢混合旋转，微距拍摄视角，催眠般的视觉效果</div>
-          <div class="template-meta">
-            <div>
-              <span class="tag">抽象</span>
-              <span class="tag">艺术</span>
-            </div>
-            <a href="editor.html" class="use-btn">使用</a>
-          </div>
-        </div>
+    <div class="card">
+      <div class="row"><div class="section-title" style="margin-bottom:0;">场景分类</div><span class="badge badge-dark">MVP 4 类</span></div>
+      <div style="margin-top:12px;">
+        <span class="chip">新品介绍</span><span class="chip">活动促销</span><span class="chip">图文转视频</span><span class="chip">口播讲解</span>
       </div>
     </div>
-
-    <!-- 加载更多 -->
-    <div style="text-align: center; margin-top: 24px;">
-      <button class="btn-secondary">加载更多模板 ↓</button>
+    <div class="grid-3">
+      <div class="card">
+        <div class="placeholder" style="height:120px;">模板封面</div>
+        <div style="margin-top:12px;"><strong>新品三镜头快闪</strong></div>
+        <p class="text-secondary" style="margin-top:6px;">18 秒 / 3 镜头 / 字幕大字版 / 适合电商上新</p>
+        <div class="footer-links"><a class="btn-secondary" href="editor.html">预览</a><a class="btn-primary" href="ai-result.html">套用模板</a></div>
+      </div>
+      <div class="card">
+        <div class="placeholder" style="height:120px;">模板封面</div>
+        <div style="margin-top:12px;"><strong>活动倒计时促销</strong></div>
+        <p class="text-secondary" style="margin-top:6px;">22 秒 / 4 镜头 / 强 CTA / 适合节日活动</p>
+        <div class="footer-links"><a class="btn-secondary" href="editor.html">预览</a><a class="btn-primary" href="ai-result.html">套用模板</a></div>
+      </div>
+      <div class="card">
+        <div class="placeholder" style="height:120px;">模板封面</div>
+        <div style="margin-top:12px;"><strong>图文转视频基础版</strong></div>
+        <p class="text-secondary" style="margin-top:6px;">20 秒 / 5 镜头 / 图片轮播 / 适合资讯整理</p>
+        <div class="footer-links"><a class="btn-secondary" href="editor.html">预览</a><a class="btn-primary" href="ai-result.html">套用模板</a></div>
+      </div>
     </div>
   </div>
+
 </body>
 </html>
